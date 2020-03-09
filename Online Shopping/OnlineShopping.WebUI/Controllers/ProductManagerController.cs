@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using OnlineShopping.Core.Models;
+using OnlineShopping.Core.ViewModels;
 using OnlineShopping.DataAccess.InMemory;
 
 namespace OnlineShopping.WebUI.Controllers
@@ -11,9 +12,11 @@ namespace OnlineShopping.WebUI.Controllers
     public class ProductManagerController : Controller
     {
         ProductRepository context;
+        ProductCategoryRepository productCategories;
         public ProductManagerController()
         {
             context = new ProductRepository();
+            productCategories = new ProductCategoryRepository();
         }
         // GET: ProductManager
         public ActionResult Index()
@@ -25,8 +28,12 @@ namespace OnlineShopping.WebUI.Controllers
 
         public ActionResult Create()
         {
-            Product product = new Product();
-            return View(product);
+
+            ProductManagerViewModel viewModel = new ProductManagerViewModel();
+            
+            viewModel.product = new Product();
+            viewModel.productCategories = productCategories.Collection();
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -54,10 +61,13 @@ namespace OnlineShopping.WebUI.Controllers
             }
             else
             {
-                return View(product);
+                ProductManagerViewModel viewModel = new ProductManagerViewModel();
+                viewModel.product = product;
+                viewModel.productCategories = productCategories.Collection();
+                return View(viewModel);
             }
         }
-        [HttpPost]
+        [HttpPost] 
         public ActionResult Edit(Product product, string Id)
         {
             Product productToEdit = context.Find(Id);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using OnlineShopping.Core.Contracts;
 using OnlineShopping.Core.Models;
 using OnlineShopping.DataAccess.InMemory;
   
@@ -11,10 +12,10 @@ namespace OnlineShopping.WebUI.Controllers
 {
     public class ProductCategoryManagerController : Controller
     {
-        InMemoryRepository<ProductCategory> context;
-        public ProductCategoryManagerController()
+        IRepository<ProductCategory> context;
+        public ProductCategoryManagerController(IRepository<ProductCategory> productCategoryContext)
         {
-            context = new InMemoryRepository<ProductCategory>();
+           context = productCategoryContext;
         }
         // GET: ProductCategoryManager
         public ActionResult Index()

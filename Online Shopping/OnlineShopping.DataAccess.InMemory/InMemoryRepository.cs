@@ -1,4 +1,5 @@
-﻿using OnlineShopping.Core.Models;
+﻿using OnlineShopping.Core.Contracts;
+using OnlineShopping.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShopping.DataAccess.InMemory
 {
-    public class InMemoryRepository<T>where T: BaseEntity
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items;
@@ -24,6 +25,7 @@ namespace OnlineShopping.DataAccess.InMemory
             }
         }
 
+
         public void Commit()
         {
             cache[className] = items;
@@ -36,7 +38,7 @@ namespace OnlineShopping.DataAccess.InMemory
 
         public void Update(T t)
         {
-            T tToUpdate = items.Find(p=> p.Id == t.Id);
+            T tToUpdate = items.Find(p => p.Id == t.Id);
 
             if (tToUpdate != null)
             {

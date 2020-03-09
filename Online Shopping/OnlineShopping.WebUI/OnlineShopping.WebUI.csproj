@@ -170,6 +170,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProductManagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -235,6 +236,10 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\ProductManager\Index.cshtml" />
+    <Content Include="Views\ProductManager\Create.cshtml" />
+    <Content Include="Views\ProductManager\Edit.cshtml" />
+    <Content Include="Views\ProductManager\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -251,6 +256,24 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineShopping.Core\OnlineShopping.Core.csproj">
+      <Project>{36805cf1-ff7f-4e8c-8377-c49ecc13773e}</Project>
+      <Name>OnlineShopping.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlineShopping.DataAccess.InMemory\OnlineShopping.DataAccess.InMemory.csproj">
+      <Project>{8a46b4a7-3ea6-40bd-9736-2a6a9823c4b6}</Project>
+      <Name>OnlineShopping.DataAccess.InMemory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlineShopping.DataAccess.SQL\OnlineShopping.DataAccess.SQL.csproj">
+      <Project>{fe0139e8-d59b-4c11-bf72-e54546ac2c89}</Project>
+      <Name>OnlineShopping.DataAccess.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlineShopping.Services\OnlineShopping.Services.csproj">
+      <Project>{d7760d82-b889-4467-a067-ae6892faee70}</Project>
+      <Name>OnlineShopping.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

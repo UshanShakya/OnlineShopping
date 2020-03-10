@@ -10,17 +10,17 @@ using System.Web;
 
 namespace OnlineShopping.Services
 {
-    class BasketService : IBasketService
+    public class BasketService : IBasketService
     {
         IRepository<Product> productContext;
         IRepository<Basket> basketContext;
+
         public const string BasketSessionName = "eCommerceBasket";
 
         public BasketService(IRepository<Product> ProductContext, IRepository<Basket> BasketContext)
         {
-            this.productContext = ProductContext;
             this.basketContext = BasketContext;
-
+            this.productContext = ProductContext;
         }
 
         private Basket GetBasket(HttpContextBase httpContext, bool createIfNull)
@@ -29,7 +29,7 @@ namespace OnlineShopping.Services
 
             Basket basket = new Basket();
 
-            if(cookie != null)
+            if (cookie != null)
             {
                 string basketId = cookie.Value;
                 if (!string.IsNullOrEmpty(basketId))
@@ -44,6 +44,14 @@ namespace OnlineShopping.Services
                     }
                 }
             }
+            else
+            {
+                if (createIfNull)
+                {
+                    basket = CreateNewBasket(httpContext);
+                }
+            }
+
             return basket;
 
         }
@@ -66,7 +74,8 @@ namespace OnlineShopping.Services
         {
             Basket basket = GetBasket(httpContext, true);
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.ProductId == productId);
-            if(item == null)
+
+            if (item == null)
             {
                 item = new BasketItem()
                 {
@@ -81,6 +90,7 @@ namespace OnlineShopping.Services
             {
                 item.Quantity = item.Quantity + 1;
             }
+
             basketContext.Commit();
         }
 
@@ -89,7 +99,7 @@ namespace OnlineShopping.Services
             Basket basket = GetBasket(httpContext, true);
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.Id == itemId);
 
-            if(item == null)
+            if (item != null)
             {
                 basket.BasketItems.Remove(item);
                 basketContext.Commit();
@@ -98,23 +108,23 @@ namespace OnlineShopping.Services
 
         public List<BasketItemViewModel> GetBasketItems(HttpContextBase httpContext)
         {
-            Basket basket = GetBasket(httpContext, true);
-            if(basket != null)
+            Basket basket = GetBasket(httpContext, false);
+
+            if (basket != null)
             {
-                var result = (from b in basket.BasketItems
-                              join p in productContext.Collection()
-                              on b.ProductId equals p.Id
-                              select new BasketItemViewModel()
-                              {
-                                  Id = b.Id,
-                                  Quantity = b.Quantity,
-                                  Image = p.Image,
-                                  Price = p.Price
-
-                              }
+                var results = (from b in basket.BasketItems
+                               join p in productContext.Collection() on b.ProductId equals p.Id
+                               select new BasketItemViewModel()
+                               {
+                                   Id = b.Id,
+                                   Quantity = b.Quantity,
+                                   ProductName = p.Name,
+                                   Image = p.Image,
+                                   Price = p.Price
+                               }
                               ).ToList();
-                return result;
 
+                return results;
             }
             else
             {
@@ -130,9 +140,9 @@ namespace OnlineShopping.Services
             {
                 int? basketCount = (from item in basket.BasketItems
                                     select item.Quantity).Sum();
+
                 decimal? basketTotal = (from item in basket.BasketItems
-                                        join p in productContext.Collection()
-                                        on item.ProductId equals p.Id
+                                        join p in productContext.Collection() on item.ProductId equals p.Id
                                         select item.Quantity * p.Price).Sum();
 
                 model.BasketCount = basketCount ?? 0;
@@ -145,7 +155,5 @@ namespace OnlineShopping.Services
                 return model;
             }
         }
-
-
     }
 }

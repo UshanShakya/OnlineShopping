@@ -33,7 +33,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <img class="img-responsive" height="200px" width="200px" src="~/Content/ProductImages/@item.Image"/>
+            <img class="img-responsive" style="height:200px;width:200px" src="~/Content/ProductImages/@item.Image"/>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)

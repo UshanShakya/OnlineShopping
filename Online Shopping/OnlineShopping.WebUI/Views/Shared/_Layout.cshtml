@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿ <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -27,6 +27,9 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
+                @{ 
+                    Html.RenderAction("BasketSummary", "Basket");
+                }
             </div>
         </div>
     </div>

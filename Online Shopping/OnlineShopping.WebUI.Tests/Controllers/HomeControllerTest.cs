@@ -6,49 +6,29 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OnlineShopping.WebUI;
 using OnlineShopping.WebUI.Controllers;
+using OnlineShopping.Core.Contracts;
+using OnlineShopping.Core.Models;
+using OnlineShopping.Core.ViewModels;
 
 namespace OnlineShopping.WebUI.Tests.Controllers
 {
     [TestClass]
-    public class HomeControllerTest
+    public class UnitTest1
     {
         [TestMethod]
-        public void Index()
+        public void IndexPageDoesReturnProducts()
         {
-            // Arrange
-           // HomeController controller = new HomeController();
+            IRepository<Product> productContext = new Mocks.MockContext<Product>();
+            IRepository<ProductCategory> productCategoryContext = new Mocks.MockContext<ProductCategory>();
 
-            // Act
-           // ViewResult result = controller.Index() as ViewResult;
+            productContext.Insert(new Product());
 
-            // Assert
-            //Assert.IsNotNull(result);
-        }
+            HomeController controller = new HomeController(productContext,productCategoryContext);
 
-        [TestMethod]
-        public void About()
-        {
-            // Arrange
-           // HomeController controller = new HomeController();
+            var result = controller.Index() as ViewResult;
+            var viewModel = (ProductListViewModel)result.ViewData.Model;
 
-            // Act
-            //ViewResult result = controller.About() as ViewResult;
-
-            // Assert
-           // Assert.AreEqual("Your application description page.", result.ViewBag.Message);
-        }
-
-        [TestMethod]
-        public void Contact()
-        {
-            // Arrange
-            //HomeController controller = new HomeController();
-
-            // Act
-            //ViewResult result = controller.Contact() as ViewResult;
-
-            // Assert
-            //Assert.IsNotNull(result);
+            Assert.AreEqual(1, viewModel.product.Count());
         }
     }
 }
